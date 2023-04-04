@@ -1,4 +1,6 @@
+import { useLocation } from 'react-router-dom'
 export const DeckViewer = () => {
-  const a = 1
-  return <div>DeckViewer</div>
+  const location = useLocation()
+  const { deckList } = location.state
+  return <div>DeckViewer: {deckList}</div>
 }
