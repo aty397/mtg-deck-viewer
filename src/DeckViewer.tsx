@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import useSWR from 'swr'
+import { CanvasComponent } from './canvasComponentTest'
 import './DeckViewer.css'
 import { deckListParser } from './utils/deckListParser'
 
@@ -19,6 +20,7 @@ export const DeckViewer = () => {
       <p>decklist</p>
       <p>{deckList}</p>
       <DeckVisualView deckList={deckList} />
+      <CanvasComponent />
     </div>
   )
 }
