@@ -1,11 +1,8 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
+import { DECKLIST_PLACEHOLDER } from './constants'
 
-const DECKLIST_PLACEHOLDER = `
-3 Skrelv, Defector Mite (ONE) 33
-4 Dennick, Pious Apprentice (MID) 217
-`
 export const Home = () => {
   const textAreaRef = useRef(null)
   const [textAreaValue, setTextAreaValue] = useState(DECKLIST_PLACEHOLDER)

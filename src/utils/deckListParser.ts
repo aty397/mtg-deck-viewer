@@ -14,9 +14,12 @@ export const deckListParser = (deckListInput: string) => {
       ? deckListEntry.match(/\(([^)]+)\)/)[1].toLowerCase()
       : '' // セット名は小文字3文字
     const number = deckListEntry.split(' ').pop()
-    // console.log(card)
-    result.push(`${API_URL}${set}/${number}`) //TODO: 日本語表示対応は/jaを追加すればいいけど非対応のカードもあるのでやめとく
+    const cardEntry = {
+      numbers: Number(deckListEntry.split(' ')[0]),
+      apiUrl: `${API_URL}${set}/${number}`,
+    }
+    result.push(cardEntry) //TODO: 日本語表示対応は/jaを追加すればいいけど非対応のカードもあるのでやめとく
   }
-  console.log('parser end')
+  console.log('parser end', result)
   return result
 }

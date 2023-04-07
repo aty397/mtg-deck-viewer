@@ -1,0 +1,11 @@
+.DeckViewer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.DeckVisualBox {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}

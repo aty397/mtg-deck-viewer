@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import useSWR from 'swr'
+import './DeckViewer.css'
 import { deckListParser } from './utils/deckListParser'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -10,16 +11,37 @@ export const DeckViewer = () => {
   const { deckList } = location.state
   console.log('deckList', deckList)
 
-  // set , 番号 , 枚数 , カード名 , image URL . apiURL
-  const apiURLList = deckListParser(deckList)
+  // [{枚数 , apiURL}]
+  const cardEntryArray = deckListParser(deckList)
 
   return (
-    <div>
+    <div className='DeckViewer'>
       <p>decklist</p>
       <p>{deckList}</p>
-      {apiURLList.map((url) => {
-        console.log('url', url)
-        return <Card apiURL={url} />
+      <DeckVisualView deckList={deckList} />
+    </div>
+  )
+}
+
+type DeckVisualViewProps = {
+  deckList: string
+}
+
+const DeckVisualView = ({ deckList }: DeckVisualViewProps) => {
+  console.log('deckList', deckList)
+  // [{枚数 , apiURL}]
+  const cardEntryArray = deckListParser(deckList)
+  console.log('deckList', deckList)
+  return (
+    <div className='DeckVisualBox'>
+      {cardEntryArray.map((card) => {
+        console.log('url', card['apiUrl'], 'numbers', card['numbers'])
+        const cards = []
+        // card['numbers']枚分のカードを表示する
+        for (let i = 0; i < card['numbers']; i++) {
+          cards.push(<Card apiURL={card['apiUrl']} />)
+        }
+        return cards
       })}
     </div>
   )
@@ -38,14 +60,12 @@ const Card = ({ apiURL }: CardProps) => {
   // 両面カードの場合データ構造が異なのので場合分けする
   const imageUrl =
     'image_uris' in data
-      ? data['image_uris']['large']
-      : data['card_faces'][0]['image_uris']['large']
+      ? data['image_uris']['small']
+      : data['card_faces'][0]['image_uris']['small']
   console.log('imageUrl', imageUrl)
   return (
-    <div key={apiURL}>
-      <p>Card Component</p>
-      <p>{data['printed_name']}</p>
+    <>
       <img src={imageUrl} />
-    </div>
+    </>
   )
 }
