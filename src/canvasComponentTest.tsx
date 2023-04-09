@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import './canvas.css'
 const testImageList = [
   'https://cards.scryfall.io/small/front/9/e/9ed7441f-f624-49c8-8611-d9bba0e441ac.jpg?1675957278',
@@ -86,6 +86,7 @@ export const CanvasComponent = ({
   imageList,
   deckName,
 }: CanvasComponentProps) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const download = (data: string, filename: string) => {
     const a = document.createElement('a')
     a.href = data
@@ -95,16 +96,14 @@ export const CanvasComponent = ({
   }
 
   const saveImage = () => {
-    const canvas =
-      (document.getElementById('deckListCanvas') as HTMLCanvasElement) || null
-    const dataURL = canvas.toDataURL('image/png')
+    if (!canvasRef.current) return
+    const dataURL = canvasRef.current.toDataURL('image/png')
     download(dataURL, 'canvas.png')
   }
 
   useEffect(() => {
-    const canvas =
-      (document.getElementById('deckListCanvas') as HTMLCanvasElement) || null
-    const ctx = canvas.getContext('2d')
+    if (!canvasRef.current) return
+    const ctx = canvasRef.current.getContext('2d')
     if (ctx === null) return
 
     // Draw text on the canvas
@@ -127,7 +126,12 @@ export const CanvasComponent = ({
 
   return (
     <div>
-      <canvas id='deckListCanvas' width='1000' height='2500'></canvas>
+      <canvas
+        id='deckListCanvas'
+        width='1000'
+        height='2500'
+        ref={canvasRef}
+      ></canvas>
       <button onClick={saveImage}>Save Image</button>
     </div>
   )
