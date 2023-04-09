@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import useSWR from 'swr'
-import { CanvasComponent } from './canvasComponentTest'
+import { CanvasComponent } from './canvasComponent'
 import './DeckViewer.css'
 import { deckListParser } from './utils/deckListParser'
 
