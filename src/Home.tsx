@@ -4,10 +4,12 @@ import './App.css'
 import { DECKLIST_PLACEHOLDER } from './constants'
 
 export const Home = () => {
-  const textAreaRef = useRef(null)
-  const [textAreaValue, setTextAreaValue] = useState(DECKLIST_PLACEHOLDER)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const [textAreaValue, setTextAreaValue] =
+    useState<string>(DECKLIST_PLACEHOLDER)
 
   const handleChange = () => {
+    if (textAreaRef.current === null) return
     const newValue = textAreaRef.current.value
     setTextAreaValue(newValue)
     console.log(newValue)

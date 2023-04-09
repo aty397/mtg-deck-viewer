@@ -10,9 +10,11 @@ export const deckListParser = (deckListInput: string) => {
   console.log(deckListArray)
 
   for (const deckListEntry of deckListArray) {
-    const set = deckListEntry.match(/\(([^)]+)\)/)
-      ? deckListEntry.match(/\(([^)]+)\)/)[1].toLowerCase()
-      : '' // セット名は小文字3文字
+    // 正規表現でセット名を抽出します。
+    // match() が null を返した場合は、if 文が実行されません。
+    const setMatchResult = deckListEntry.match(/\(([^)]+)\)/)
+    if (!setMatchResult) continue
+    const set = setMatchResult[1].toLowerCase() // セット名は()の中身の小文字3文字
     const number = deckListEntry.split(' ').pop()
     const cardEntry = {
       numbers: Number(deckListEntry.split(' ')[0]),

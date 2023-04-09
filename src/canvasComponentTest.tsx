@@ -86,7 +86,7 @@ export const CanvasComponent = ({
   imageList,
   deckName,
 }: CanvasComponentProps) => {
-  const download = (data, filename) => {
+  const download = (data: string, filename: string) => {
     const a = document.createElement('a')
     a.href = data
     a.download = filename
@@ -95,14 +95,17 @@ export const CanvasComponent = ({
   }
 
   const saveImage = () => {
-    const canvas = document.getElementById('deckListCanvas')
+    const canvas =
+      (document.getElementById('deckListCanvas') as HTMLCanvasElement) || null
     const dataURL = canvas.toDataURL('image/png')
     download(dataURL, 'canvas.png')
   }
 
   useEffect(() => {
-    const canvas = document.getElementById('deckListCanvas')
+    const canvas =
+      (document.getElementById('deckListCanvas') as HTMLCanvasElement) || null
     const ctx = canvas.getContext('2d')
+    if (ctx === null) return
 
     // Draw text on the canvas
     ctx.font = '30px Arial'
