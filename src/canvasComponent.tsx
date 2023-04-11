@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react'
 import './canvas.css'
 import { TESH_IMAGE_URL_LIST } from './constants'
+import { cardEntryType } from './types'
 
 const firstPosition = [10, 50]
 type CanvasComponentProps = {
-  imageList?: string[]
+  cardEntryList?: cardEntryType[]
   deckName?: string
 }
 
@@ -12,7 +13,7 @@ const cardWidth = 146
 const cardHeight = 204
 
 export const CanvasComponent = ({
-  imageList,
+  cardEntryList,
   deckName,
 }: CanvasComponentProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)

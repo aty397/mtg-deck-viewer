@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom'
 import useSWR from 'swr'
 import { CanvasComponent } from './canvasComponent'
 import './DeckViewer.css'
+import { cardType } from './types'
 import { deckListParser } from './utils/deckListParser'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -10,40 +11,29 @@ export const DeckViewer = () => {
   console.log('DeckViewer')
   const location = useLocation()
   const { deckList } = location.state
-  console.log('deckList', deckList)
 
-  // [{枚数 , apiURL}]
-  const cardEntryArray = deckListParser(deckList)
+  // [{apiURL}]
+  const cardList: cardType[] = deckListParser(deckList)
 
   return (
     <div className='DeckViewer'>
       <p>decklist</p>
       <p>{deckList}</p>
-      <DeckVisualView deckList={deckList} />
+      <DeckVisualView cardList={cardList} />
       <CanvasComponent />
     </div>
   )
 }
 
 type DeckVisualViewProps = {
-  deckList: string
+  cardList: cardType[]
 }
 
-const DeckVisualView = ({ deckList }: DeckVisualViewProps) => {
-  console.log('deckList', deckList)
-  // [{枚数 , apiURL}]
-  const cardEntryArray = deckListParser(deckList)
-  console.log('deckList', deckList)
+const DeckVisualView = ({ cardList }: DeckVisualViewProps) => {
   return (
     <div className='DeckVisualBox'>
-      {cardEntryArray.map((card) => {
-        console.log('url', card['apiUrl'], 'numbers', card['numbers'])
-        const cards = []
-        // card['numbers']枚分のカードを表示する
-        for (let i = 0; i < card['numbers']; i++) {
-          cards.push(<Card apiURL={card['apiUrl']} />)
-        }
-        return cards
+      {cardList.map((card) => {
+        return <Card apiURL={card['apiUrl']} />
       })}
     </div>
   )
