@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react'
 import './canvas.css'
-import { TESH_IMAGE_URL_LIST } from './constants'
-import { cardEntryType } from './types'
+import { imageUrlFromCards } from './utils/imageUrlFromCards'
 
 const firstPosition = [10, 50]
 type CanvasComponentProps = {
-  cardEntryList?: cardEntryType[]
+  cardList: any[]
   deckName?: string
 }
 
@@ -13,7 +12,7 @@ const cardWidth = 146
 const cardHeight = 204
 
 export const CanvasComponent = ({
-  cardEntryList,
+  cardList,
   deckName,
 }: CanvasComponentProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -40,9 +39,10 @@ export const CanvasComponent = ({
     ctx.font = '30px Arial'
     ctx.fillText('Esper Legends', 10, 30)
 
-    TESH_IMAGE_URL_LIST.forEach((image, index) => {
+    console.log('canvas / cardList', cardList)
+    cardList.forEach((card, index) => {
       const img = new Image()
-      img.src = image
+      img.src = imageUrlFromCards(card)
       img.crossOrigin = 'anonymous' // CORS対策
       img.onload = () => {
         ctx.drawImage(

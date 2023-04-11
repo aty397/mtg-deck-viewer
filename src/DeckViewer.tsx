@@ -1,63 +1,52 @@
 import { useLocation } from 'react-router-dom'
-import useSWR from 'swr'
 import { CanvasComponent } from './canvasComponent'
 import './DeckViewer.css'
 import { cardType } from './types'
+import { useCard } from './useCard'
 import { deckListParser } from './utils/deckListParser'
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+import { imageUrlFromCards } from './utils/imageUrlFromCards'
 
 export const DeckViewer = () => {
-  console.log('DeckViewer')
   const location = useLocation()
   const { deckList } = location.state
 
   // [{apiURL}]
   const cardList: cardType[] = deckListParser(deckList)
 
+  const { result, loading } = useCard(cardList)
+  if (loading || result === undefined) return <div>loading...</div>
+
   return (
     <div className='DeckViewer'>
       <p>decklist</p>
       <p>{deckList}</p>
-      <DeckVisualView cardList={cardList} />
-      <CanvasComponent />
+      <DeckVisualView cardList={result} />
+      <CanvasComponent cardList={result} />
     </div>
   )
 }
 
 type DeckVisualViewProps = {
-  cardList: cardType[]
+  cardList: any[]
 }
 
 const DeckVisualView = ({ cardList }: DeckVisualViewProps) => {
   return (
     <div className='DeckVisualBox'>
       {cardList.map((card) => {
-        return <Card apiURL={card['apiUrl']} />
+        return <Card imageURL={imageUrlFromCards(card)} />
       })}
     </div>
   )
 }
 
 type CardProps = {
-  apiURL: string
+  imageURL: string
 }
-const Card = ({ apiURL }: CardProps) => {
-  const { data, error } = useSWR(apiURL, fetcher)
-  console.log('apiURL', apiURL)
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
-  if (data['object'] === 'error') return <div>error</div>
-
-  // 両面カードの場合データ構造が異なのので場合分けする
-  const imageUrl =
-    'image_uris' in data
-      ? data['image_uris']['small']
-      : data['card_faces'][0]['image_uris']['small']
-  console.log('imageUrl', imageUrl)
+const Card = ({ imageURL }: CardProps) => {
   return (
     <>
-      <img src={imageUrl} />
+      <img src={imageURL} />
     </>
   )
 }
